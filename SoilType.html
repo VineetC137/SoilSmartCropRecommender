@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Soil Types</title>
+    <link rel="stylesheet" href="style2.css">
+    <link rel="stylesheet" href="https://unpkg.com/aos@next/dist/aos.css" />
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css"
+        integrity="sha384-wvfXpqpZZVQGK6TAh5PVlGOfQNHSoD2xbE+QkPxCAFlNEevoEH3Sl0sibVcOQVnN" crossorigin="anonymous">
+</head>
+<body>
+
+
+    <section class="services" id="heritage">
+        <div class="heading white">
+            <h2>SOIL TYPES</h2>
+        <div class="content">
+            <div data-aos="flip-up" class="servicesBx">
+                <img src="img/BlackSoil.jpg" alt=""width="200" height="100">
+                <h2>Black Soil</h2>
+                <p>Black soil, also known as regur soil or black cotton soil, is a prominent soil type found in parts of India, particularly in the Deccan Plateau region. Characterized by its deep black color and high clay content, black soil is renowned for its fertility and moisture retention properties. Despite its richness in minerals like calcium, magnesium, and iron, black soil lacks organic matter.</p>
+            <a href="STBlackSoil.html" class="btn">Read More</a>
+            </div>
+            <div data-aos="flip-up" class="servicesBx">
+                <img src="img/AluvialSoil.jpeg" alt="" width="200" height="100">
+                <h2>Alluvial soil</h2>
+                <p>Alluvial soil is a significant soil type found in various parts of the world, including India, Egypt, and the United States. It forms from the deposition of sediment carried by rivers and streams, such as silt, sand, and clay. Alluvial soil is typically fertile and well-suited for agriculture due to its high nutrient content and good drainage properties.</p>
+                <a href="STAlluvialSoil.html" class="btn">Read More</a>
+            </div>
+            <div data-aos="flip-up" class="servicesBx">
+                <img src="img/ClaySoil.jpeg" alt="" width="200" height="100">
+                <h2>Clay Soil</h2>
+                <p>Clay soil is a type of soil characterized by its small particle size and high plasticity when wet. It has excellent water retention properties but poor drainage, making it heavy and sticky. Clay soil is rich in nutrients and minerals, making it fertile for plant growth. However, it can be challenging to work with, especially when wet, as it becomes compacted easily.</p> 
+                <a href="STClaySoil.html" class="btn">Read More</a>
+            </div>
+            <div data-aos="flip-up" class="servicesBx">
+                <img src="img/RedSoil.jpeg" alt="" width="200" height="100">
+                <h2>Red Soil</h2>
+                <p>Red soil, characterized by its reddish color due to iron oxide content, is found in tropical and subtropical regions globally. It forms from the weathering of crystalline rocks like granite and gneiss. Though acidic and moderately fertile, its fertility varies. Red soil is prevalent in India, particularly in states like Tamil Nadu and Karnataka.</p>
+                <a href="STRedSoil.html" class="btn">Read More</a>
+            </div>
+             <div data-aos="flip-up" class="servicesBx">
+                <img src="img/SandyLoamSoil.jpeg" alt="" width="200" height="100">
+                <h2>Sandy Loam soil</h2>
+                <p>Sandy loam soil is a balanced mixture of sand, silt, and clay particles. It offers good drainage due to the sandy component, while the presence of silt and clay provides adequate moisture retention. This type of soil is loose and friable, making it easy to work with and cultivate. Sandy loam soil is generally fertile and nutrient-rich, allowing for healthy plant growth.</p>
+                <a href="STSandyLoamSoil.html" class="btn">Read More</a>
+            </div>
+            <div data-aos="flip-up" class="servicesBx">
+                <img src="img/SiltySoil.jpeg" alt="" width="200" height="100">
+                <h2>Silthy Soil</h2>
+                <p>Silty soil is composed of fine particles, smaller than sand but larger than clay. It has excellent moisture retention properties and good fertility due to its high nutrient content.It is relatively easy to cultivate and work with, offering good drainage while retaining moisture for plant growth. Silty soil is suitable for a wide range of crops and certain fruits.</p>
+                <a href="STSilthySoil.html" class="btn">Read More</a>
+            </div>
+        </div>
+    </section>
+    <footer class="text-center mt-12 poppins">
+        <center>
+        Soilsmart Crop Recommender
+        PBL</center>
+      </footer>
+    <script src="https://unpkg.com/aos@next/dist/aos.js"></script>
+    <script>
+        AOS.init({
+            offset: 150,
+            duration: 1000,
+        });
+    </script>
+    <script src="https://code.jquery.com/jquery-2.2.4.min.js"
+        integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44=" crossorigin="anonymous"></script>
+    <script src="https://smtpjs.com/v3/smtp.js"></script>
+    <script>
+        addEventListener('scroll', function () {
+            var header = document.querySelector('header');
+            header.classList.toggle('sticky', scrollY > 0);
+        });
+
+        function toggleMenu() {
+            var menuToggle = document.querySelector('.toggle');
+            var menu = document.querySelector('.menu');
+            menuToggle.classList.toggle('active');
+            menu.classList.toggle('active');
+        }
+    </script>
+    <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,627 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Crop Recommendation</title>
+<style>
+    body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        background-image: url('img/farm5.jpg');
+        background-size: cover;
+        background-position: center;
+        background-repeat: no-repeat;
+        color: #333;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 50px auto;
+        padding: 20px;
+        background-color: rgba(255, 255, 255, 0.5); /* Transparent background */
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        overflow: hidden;
+    }
+
+    h2 {
+        text-align: center;
+        margin-bottom: 30px;
+        font-size: 36px;
+        text-transform: uppercase;
+        letter-spacing: 2px;
+        color: #444;
+    }
+
+    label {
+        font-weight: bold;
+        font-size: 18px;
+        transition: transform 0.3s ease;
+    }
+
+    select, input[type="number"] {
+        width: 100%;
+        padding: 10px;
+        margin-top: 5px;
+        margin-bottom: 15px;
+        border: 1px solid #ccc;
+        border-radius: 5px;
+        box-sizing: border-box;
+        transition: transform 0.3s ease;
+    }
+
+    button {
+        padding: 12px 24px;
+        background-color: #4CAF50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+        transition: background-color 0.3s ease, transform 0.3s ease;
+    }
+
+    button:hover {
+        background-color: #45a049;
+        transform: scale(1.05);
+    }
+
+    #result {
+        margin-top: 20px;
+        font-weight: bold;
+        text-align: center;
+        font-size: 24px;
+        transition: transform 2s ease;
+    }
+</style>
+</head>
+<body>
+
+<div class="container">
+    <h2>Soil Smart Crop Recommender</h2>
+    <label for="N">Select N:</label>
+    <select id="N">
+    </select>
+
+    <label for="P">Select P:</label>
+    <select id="P">
+    </select>
+
+    <label for="K">Select K:</label>
+    <select id="K">
+    </select>
+
+    <label for="temperature">Temperature (°C):</label>
+    <select id="temperature">
+    </select>
+
+    <label for="humidity">Humidity (%):</label>
+    <select id="humidity">
+    </select>
+
+    <label for="ph">pH:</label>
+    <select id="ph">
+    </select>
+
+    <label for="rainfall">Rainfall (mm):</label>
+    <select id="rainfall">
+    </select>
+
+    <button onclick="recommendCrop()">Recommend</button>
+
+    <div id="result"></div>
+</div>
+
+<script>
+    const dataset = [
+    {
+            "Crop": "Apple",
+            "N": 121,
+            "P": 70,
+            "K": 100,
+            "Temperature": 20.45,
+            "Humidity": 60.72,
+            "Rainfall": 699.83,
+            "pH": 6.5098
+        },
+    {
+        "Crop": "Apple",
+        "N": 121,
+        "P": 70,
+        "K": 100,
+        "Temperature": 20.45,
+        "Humidity": 60.72,
+        "Rainfall": 699.83,
+        "pH": 6.5098
+    },
+    {
+        "Crop": "Mango",
+        "N": 100,
+        "P": 25,
+        "K": 131,
+        "Temperature": 30.21,
+        "Humidity": 65.23,
+        "Rainfall": 901.32,
+        "pH": 6.5333
+    },
+    {
+        "Crop": "Banana",
+        "N": 140,
+        "P": 70,
+        "K": 181,
+        "Temperature": 27.35,
+        "Humidity": 70.83,
+        "Rainfall": 1749.87,
+        "pH": 5.9797
+    },
+    {
+        "Crop": "Grapes",
+        "N": 91,
+        "P": 60,
+        "K": 140,
+        "Temperature": 25.12,
+        "Humidity": 60.35,
+        "Rainfall": 699.54,
+        "pH": 6.5365
+    },
+    {
+        "Crop": "Guava",
+        "N": 120,
+        "P": 71,
+        "K": 180,
+        "Temperature": 27.26,
+        "Humidity": 75.41,
+        "Rainfall": 1250.14,
+        "pH": 6.5296
+    },
+    {
+        "Crop": "Coconut",
+        "N": 110,
+        "P": 25,
+        "K": 181,
+        "Temperature": 30.13,
+        "Humidity": 80.12,
+        "Rainfall": 2000.49,
+        "pH": 6.5396
+    },
+    {
+        "Crop": "Papaya",
+        "N": 141,
+        "P": 71,
+        "K": 100,
+        "Temperature": 29.81,
+        "Humidity": 65.67,
+        "Rainfall": 1250.84,
+        "pH": 6.5105
+    },
+    {
+        "Crop": "Pomegranate",
+        "N": 91,
+        "P": 61,
+        "K": 101,
+        "Temperature": 25.27,
+        "Humidity": 50.92,
+        "Rainfall": 650.22,
+        "pH": 6.0073
+    },
+    {
+        "Crop": "Lotus",
+        "N": 50,
+        "P": 26,
+        "K": 50,
+        "Temperature": 27.55,
+        "Humidity": 70.17,
+        "Rainfall": 751.71,
+        "pH": 6.0312
+    },
+    {
+        "Crop": "Sunflower",
+        "N": 130,
+        "P": 61,
+        "K": 71,
+        "Temperature": 25.33,
+        "Humidity": 65.31,
+        "Rainfall": 651.86,
+        "pH": 6.5487
+    },
+    {
+        "Crop": "Marigold",
+        "N": 35,
+        "P": 25,
+        "K": 36,
+        "Temperature": 25.46,
+        "Humidity": 60.41,
+        "Rainfall": 550.57,
+        "pH": 6.5192
+    },
+    {
+        "Crop": "Rose",
+        "N": 90,
+        "P": 60,
+        "K": 101,
+        "Temperature": 20.64,
+        "Humidity": 60.23,
+        "Rainfall": 700.18,
+        "pH": 6.0101
+    },
+    {
+        "Crop": "Rice",
+        "N": 151,
+        "P": 170,
+        "K": 101,
+        "Temperature": 28.32,
+        "Humidity": 75.56,
+        "Rainfall": 1751.21,
+        "pH": 5.4932
+    },
+    {
+        "Crop": "Wheat",
+        "N": 111,
+        "P": 70,
+        "K": 70,
+        "Temperature": 18.54,
+        "Humidity": 60.72,
+        "Rainfall": 800.14,
+        "pH": 6.5412
+    },
+    {
+        "Crop": "Maize",
+        "N": 131,
+        "P": 70,
+        "K": 100,
+        "Temperature": 25.21,
+        "Humidity": 70.24,
+        "Rainfall": 750.33,
+        "pH": 6.0056
+    },
+    {
+        "Crop": "Bajra",
+        "N": 150,
+        "P": 71,
+        "K": 70,
+        "Temperature": 27.13,
+        "Humidity": 65.57,
+        "Rainfall": 550.72,
+        "pH": 6.5499
+    },
+    {
+        "Crop": "Chiku",
+        "N": 131,
+        "P": 70,
+        "K": 160,
+        "Temperature": 25.44,
+        "Humidity": 75.21,
+        "Rainfall": 1500.42,
+        "pH": 6.5693
+    },
+    {
+        "Crop": "Jawar",
+        "N": 150,
+        "P": 71,
+        "K": 101,
+        "Temperature": 25.35,
+        "Humidity": 70.31,
+        "Rainfall": 550.46,
+        "pH": 6.0225
+    },
+    {
+        "Crop": "Sugarcane",
+        "N": 151,
+        "P": 170,
+        "K": 191,
+        "Temperature": 27.44,
+        "Humidity": 75.84,
+        "Rainfall": 2001.14,
+        "pH": 6.0079
+    },
+    {
+        "Crop": "Soyabean",
+        "N": 111,
+        "P": 171,
+        "K": 100,
+        "Temperature": 25.57,
+        "Humidity": 60.46,
+        "Rainfall": 701.65,
+        "pH": 6.5576
+    },
+    {
+        "Crop": "Pineapple",
+        "N": 130,
+        "P": 71,
+        "K": 101,
+        "Temperature": 28.45,
+        "Humidity": 80.23,
+        "Rainfall": 1251.43,
+        "pH": 5.4819
+    },
+    {
+        "Crop": "Coffee",
+        "N": 91,
+        "P": 70,
+        "K": 71,
+        "Temperature": 20.35,
+        "Humidity": 75.64,
+        "Rainfall": 2001.75,
+        "pH": 6.0301
+    },
+    {
+        "Crop": "Turmeric",
+        "N": 151,
+        "P": 70,
+        "K": 101,
+        "Temperature": 25.56,
+        "Humidity": 75.34,
+        "Rainfall": 1501.86,
+        "pH": 6.5265
+    },
+    {
+        "Crop": "Pea",
+        "N": 111,
+        "P": 50,
+        "K": 90,
+        "Temperature": 20.62,
+        "Humidity": 60.94,
+        "Rainfall": 601.73,
+        "pH": 6.5324
+    },
+    {
+        "Crop": "Sprouts",
+        "N": 91,
+        "P": 41,
+        "K": 80,
+        "Temperature": 20.75,
+        "Humidity": 65.32,
+        "Rainfall": 501.44,
+        "pH": 6.5408
+    },
+    {
+        "Crop": "Cucumber",
+        "N": 100,
+        "P": 50,
+        "K": 80,
+        "Temperature": 25.61,
+        "Humidity": 70.36,
+        "Rainfall": 601.91,
+        "pH": 6.5592
+    },
+    {
+        "Crop": "Watermelon",
+        "N": 121,
+        "P": 60,
+        "K": 101,
+        "Temperature": 30.15,
+        "Humidity": 75.24,
+        "Rainfall": 701.13,
+        "pH": 6.5732
+    },
+    {
+        "Crop": "Muskmelon",
+        "N": 121,
+        "P": 60,
+        "K": 101,
+        "Temperature": 30.26,
+        "Humidity": 75.61,
+        "Rainfall": 701.54,
+        "pH": 6.5623
+    },
+    {
+        "Crop": "Dragonfruit",
+        "N": 121,
+        "P": 60,
+        "K": 101,
+        "Temperature": 25.35,
+        "Humidity": 70.13,
+        "Rainfall": 601.84,
+        "pH": 6.5719
+    },
+    {
+        "Crop": "Orange",
+        "N": 111,
+        "P": 50,
+        "K": 90,
+        "Temperature": 25.46,
+        "Humidity": 65.21,
+        "Rainfall": 651.13,
+        "pH": 6.5748
+    },
+    {
+        "Crop": "Lemon",
+        "N": 111,
+        "P": 50,
+        "K": 90,
+        "Temperature": 25.66,
+        "Humidity": 65.64,
+        "Rainfall": 651.82,
+        "pH": 6.0209
+    },
+    {
+        "Crop": "Ladyfinger",
+        "N": 120,
+        "P": 61,
+        "K": 101,
+        "Temperature": 25.34,
+        "Humidity": 70.21,
+        "Rainfall": 601.55,
+        "pH": 6.5643
+    },
+    {
+        "Crop": "Brinjal",
+        "N": 120,
+        "P": 60,
+        "K": 101,
+        "Temperature": 25.45,
+        "Humidity": 70.54,
+        "Rainfall": 601.95,
+        "pH": 6.5764
+    },
+    {
+        "Crop": "Peanuts",
+        "N": 130,
+        "P": 70,
+        "K": 110,
+        "Temperature": 30.31,
+        "Humidity": 70.15,
+        "Rainfall": 601.64,
+        "pH": 6.5648
+    },
+    {
+        "Crop": "Spinach",
+        "N": 91,
+        "P": 50,
+        "K": 80,
+        "Temperature": 20.53,
+        "Humidity": 60.82,
+        "Rainfall": 601.91,
+        "pH": 6.5782
+    },
+    {
+        "Crop": "Fenugreek",
+        "N": 100,
+        "P": 61,
+        "K": 91,
+        "Temperature": 20.25,
+        "Humidity": 60.61,
+        "Rainfall": 601.83,
+        "pH": 6.5789
+    },
+    {
+        "Crop": "Potato",
+        "N": 101,
+        "P": 60,
+        "K": 91,
+        "Temperature": 20.82,
+        "Humidity": 61.24,
+        "Rainfall": 601.15,
+        "pH": 6.5314
+    },
+    {
+        "Crop": "Tomato",
+        "N": 111,
+        "P": 60,
+        "K": 100,
+        "Temperature": 25.72,
+        "Humidity": 65.13,
+        "Rainfall": 651.71,
+        "pH": 6.5678
+    },
+    {
+        "Crop": "Onion",
+        "N": 111,
+        "P": 60,
+        "K": 100,
+        "Temperature": 20.93,
+        "Humidity": 65.56,
+        "Rainfall": 651.95,
+        "pH": 6.5549
+    },
+    {
+        "Crop": "Cabbage",
+        "N": 110,
+        "P": 60,
+        "K": 101,
+        "Temperature": 20.64,
+        "Humidity": 65.73,
+        "Rainfall": 601.61,
+        "pH": 6.5783
+    },
+    {
+        "Crop": "Tea",
+        "N": 120,
+        "P": 60,
+        "K": 101,
+        "Temperature": 20.43,
+        "Humidity": 70.32,
+        "Rainfall": 1501.73,
+        "pH": 5.4891
+    },
+    {
+        "Crop": "Jasmine",
+        "N": 110,
+        "P": 50,
+        "K": 91,
+        "Temperature": 25.83,
+        "Humidity": 70.44,
+        "Rainfall": 1501.65,
+        "pH": 6.0331
+    },
+    {
+        "Crop": "Lily",
+        "N": 103,
+        "P": 54,
+        "K": 81,
+        "Temperature": 27.34,
+        "Humidity": 72.15,
+        "Rainfall": 1543.73,
+        "pH": 6.0312
+    },
+    {
+        "Crop": "Hibiscus",
+        "N": 110,
+        "P": 50,
+        "K": 91,
+        "Temperature": 25.54,
+        "Humidity": 70.71,
+        "Rainfall": 1501.32,
+        "pH": 6.0324
+    },
+    {
+        "Crop": "Aloe Vera",
+        "N": 91,
+        "P": 41,
+        "K": 70,
+        "Temperature": 25.47,
+        "Humidity": 70.94,
+        "Rainfall": 601.24,
+        "pH": 6.5647
+    }    ];
+
+    function populateDropdown(id, values) {
+        const dropdown = document.getElementById(id);
+        values.sort((a, b) => a - b);
+        values.forEach(value => {
+            dropdown.innerHTML += `<option value="${value}">${value}</option>`;
+        });
+    }
+
+    function populateDropdowns() {
+        populateDropdown('N', [...new Set(dataset.map(item => item.N))]);
+        populateDropdown('P', [...new Set(dataset.map(item => item.P))]);
+        populateDropdown('K', [...new Set(dataset.map(item => item.K))]);
+        populateDropdown('temperature', [...new Set(dataset.map(item => item.Temperature))]);
+        populateDropdown('humidity', [...new Set(dataset.map(item => item.Humidity))]);
+        populateDropdown('ph', [...new Set(dataset.map(item => item.pH))]);
+        populateDropdown('rainfall', [...new Set(dataset.map(item => item.Rainfall))]);
+    }
+
+    populateDropdowns();
+
+    function recommendCrop() {
+        const N = parseFloat(document.getElementById('N').value);
+        const P = parseFloat(document.getElementById('P').value);
+        const K = parseFloat(document.getElementById('K').value);
+        const temperature = parseFloat(document.getElementById('temperature').value);
+        const humidity = parseFloat(document.getElementById('humidity').value);
+        const pH = parseFloat(document.getElementById('ph').value);
+        const rainfall = parseFloat(document.getElementById('rainfall').value);
+
+        const filteredData = dataset.filter(item => {
+            return item.N === N &&
+                item.P === P &&
+                item.K === K &&
+                item.Temperature === temperature &&
+                item.Humidity === humidity &&
+                item.pH === pH &&
+                item.Rainfall === rainfall;
+        });
+
+        if (filteredData.length > 0) {
+            document.getElementById('result').innerHTML = `Recommended crop: ${filteredData[0].Crop}`;
+        } else {
+            document.getElementById('result').innerHTML = "No matching crop found for the selected criteria.";
+        }
+    }
+</script>
+
+</body>
+</html>
